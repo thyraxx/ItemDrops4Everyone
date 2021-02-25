@@ -22,9 +22,10 @@ namespace ItemDrops4Everyone
 
             On.RoR2.PickupDropletController.CreatePickupDroplet += (orig, pickupIndex, position, velocity) =>
             {
+                GameObject pickupDropletPrefab = typeof(PickupDropletController).GetFieldValue<GameObject>("pickupDropletPrefab");
+
                 foreach (var player in PlayerCharacterMasterController.instances.Select(p => p.master))
                 {
-                    GameObject pickupDropletPrefab = typeof(PickupDropletController).GetFieldValue<GameObject>("pickupDropletPrefab");
                     GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(pickupDropletPrefab, player.GetBody().corePosition, Quaternion.identity);
                     gameObject.GetComponent<PickupDropletController>().NetworkpickupIndex = pickupIndex;
                     Rigidbody component = gameObject.GetComponent<Rigidbody>();
