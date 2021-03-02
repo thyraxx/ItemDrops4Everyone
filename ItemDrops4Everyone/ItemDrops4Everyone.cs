@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using BepInEx;
 using RewiredConsts;
@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using R2API.Utils;
 using UnityEngine.Events;
 using System.Reflection;
+using R2API;
 
 namespace ItemDrops4Everyone
 {
@@ -24,9 +25,9 @@ namespace ItemDrops4Everyone
             {
                 GameObject pickupDropletPrefab = typeof(PickupDropletController).GetFieldValue<GameObject>("pickupDropletPrefab");
 
-                foreach (var player in PlayerCharacterMasterController.instances.Select(p => p.master))
+                foreach (var player in PlayerCharacterMasterController.instances.Select(p => p.master).Where(ply => ply.lostBodyToDeath == false))
                 {
-                    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(pickupDropletPrefab, player.GetBody().corePosition, Quaternion.identity);
+                    GameObject gameObject = Instantiate(pickupDropletPrefab, player.GetBody().corePosition, Quaternion.identity);
                     gameObject.GetComponent<PickupDropletController>().NetworkpickupIndex = pickupIndex;
                     Rigidbody component = gameObject.GetComponent<Rigidbody>();
                     component.velocity = velocity;
